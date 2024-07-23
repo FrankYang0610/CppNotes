@@ -4,12 +4,12 @@
 
 **1. `{}`可以被解读为初始化数组的列表：**
 
-```cpp
+```c++
 int array[] = {1, 2, 3, 4, 5}; 
 ```
 
-**2. `{}`还可以被解读为std::initializer_list：**
-```cpp
+**2. `{}`还可以被解读为``std::initializer_list``：**
+```c++
 std::vector<int> vec = {1, 2, 3, 4, 5};
 // {}内的数据被转换为std::initializer_list，然后调用std::vector(initializer_list<value_type> il)构造函数。
 ```
