@@ -37,7 +37,7 @@ template <class _Tp> struct _LIBCPP_TEMPLATE_VIS remove_reference<_Tp&&>
 ```
 所以，我们用`std::remove_reference<std::vector&>::type`就可以得到一个`std::vector`类型的容器。显然在这里这显得有些繁琐，不过`std::remove_reference`这种语法的通用性是相当高的。
 
-泛型模版`<class _Tp>`的`_Tp`为什么不能是引用？换句话说，为什么`_Tp&`才一定是一种引用？**这是因为，在C++模版化编程中，`template`指定的模版必须是基本类型，即基本数据类型、类类型和指针类型。如果`_Tp`是一个引用类型，编译器会自动去引用。**
+泛型模版`<class _Tp>`的`_Tp`为什么不能是引用？换句话说，为什么`_Tp&`才一定是一种引用？**这是因为`remove_reference<_Tp&>`和`remove_reference<_Tp&&>`的声明实现了模版的部分特化（partial specialization），使得编译器可以特别对待两种引用类型。**
 
 ---
 
@@ -51,7 +51,7 @@ this->__end_ = __x.__end_;
 this->__end_cap() = __x.__end_cap();
 __x.__begin_ = __x.__end_ = __x.__end_cap() = nullptr;
 ```
-不难看出，`__begin`、`__end`和`__end_cap()`是`std::vector`类的私有成员。由于`std::vector`内部是顺序存储的，所以只需要保留首尾指针。此外，最后一行的赋值操作展现了右值将亡值的「死亡」过程。此构造函数将使`__x`彻底失效。
+不难看出，`__begin`、`__end`和`__end_cap()`是`std::vector`类的私有成员。由于`std::vector`内部是顺序存储的，所以只需要转移首尾指针，而不需要转移栈上的实际数据，这大大减少了拷贝的成本。此外，最后一行的赋值操作展现了右值将亡值的「死亡」过程。此构造函数将使`__x`彻底失效。
 
 ---
 
